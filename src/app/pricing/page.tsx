@@ -130,7 +130,7 @@ export default function PricingPage() {
 
             {/* Obsolete Piggy Bank Graphic */}
             <div className="md:col-span-4 flex flex-col justify-center items-center">
-              <div className="max-w-[280px] text-center">
+              <div className="max-w-70 text-center">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNPFsXc3BvS_reG0XUgV03xN3Ek9Xv34EzGk7ZqmJ6jTDpPWtAMQvA_BxwjzKpoD3l01SDdmmWltq_R9_tkd6ZUvNE3kOAnzlml5HfBla4vbeGHUKKP6itCmdf_OqTQ1k1jLGfKpkj5bZTxXckr2OevTFBqXvgsmhrRRj8ViMknC8lUzx6zx_z8UPgrbSjc7Q6jdOi53NPRhtB6d0axj4S8hxXJICZbM8NoxZC5LfWb_ysbDxfo2v1479ZhMZmbJ4mONrbws8PFoMt"

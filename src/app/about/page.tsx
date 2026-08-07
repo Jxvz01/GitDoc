@@ -87,7 +87,7 @@ export default function AboutPage() {
               { emoji: "🕒", value: "24/7", label: "Always Analyzing" },
               { emoji: "⭐", value: "4.9/5", label: "Developer Rating" },
             ].map((stat) => (
-              <div key={stat.label} className="flex-1 min-w-[200px] p-6 flex items-center gap-4">
+              <div key={stat.label} className="flex-1 min-w-50 p-6 flex items-center gap-4">
                 <div className="text-3xl">{stat.emoji}</div>
                 <div>
                   <div className="text-2xl font-bold">{stat.value}</div>

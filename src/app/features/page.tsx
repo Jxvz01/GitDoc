@@ -70,7 +70,7 @@ export default function FeaturesPage() {
             <span className="font-fig-number text-xs text-[#7e7576] font-mono font-bold tracking-widest uppercase">
               FIG. 14 — ARCHITECTURAL ANALYSIS OVERVIEW
             </span>
-            <span className="handwritten text-black text-lg rotate-[-2deg]">
+            <span className="handwritten text-black text-lg -rotate-2">
               Initial concept phase
             </span>
           </div>
@@ -162,7 +162,7 @@ export default function FeaturesPage() {
               <h3 className="font-headline-md text-xl font-bold mb-3 uppercase tracking-tight">
                 Architecture Diagrams
               </h3>
-              <p className="font-body-sm text-xs text-[#4c4546] font-mono mb-6 flex-grow leading-relaxed">
+              <p className="font-body-sm text-xs text-[#4c4546] font-mono mb-6 grow leading-relaxed">
                 Generate real-time isometric building representations of your microservices and modules.
               </p>
               <div className="flex justify-between items-center border-t border-black/10 pt-4 font-mono text-xs">
@@ -194,7 +194,7 @@ export default function FeaturesPage() {
               <h3 className="font-headline-md text-xl font-bold mb-3 uppercase tracking-tight">
                 Technical Score
               </h3>
-              <p className="font-body-sm text-xs text-[#4c4546] font-mono mb-6 flex-grow leading-relaxed">
+              <p className="font-body-sm text-xs text-[#4c4546] font-mono mb-6 grow leading-relaxed">
                 Quantifiable metrics for maintainability, technical debt, and architectural drift.
               </p>
               <div className="flex justify-between items-center border-t border-black/10 pt-4 font-mono text-xs">
@@ -224,7 +224,7 @@ export default function FeaturesPage() {
               <h3 className="font-headline-md text-xl font-bold mb-3 uppercase tracking-tight">
                 Security Protocol
               </h3>
-              <p className="font-body-sm text-xs text-[#4c4546] font-mono mb-6 flex-grow leading-relaxed">
+              <p className="font-body-sm text-xs text-[#4c4546] font-mono mb-6 grow leading-relaxed">
                 Automated vulnerability scanning with structural risk assessment across all nodes.
               </p>
               <div className="flex justify-between items-center border-t border-black/10 pt-4 font-mono text-xs">
@@ -256,7 +256,7 @@ export default function FeaturesPage() {
               <h3 className="font-headline-md text-xl font-bold mb-3 uppercase tracking-tight">
                 Blueprinted Docs
               </h3>
-              <p className="font-body-sm text-xs text-[#4c4546] font-mono mb-6 flex-grow leading-relaxed">
+              <p className="font-body-sm text-xs text-[#4c4546] font-mono mb-6 grow leading-relaxed">
                 Auto-generated documentation that stays in sync with your structural changes.
               </p>
               <div className="flex justify-between items-center border-t border-black/10 pt-4 font-mono text-xs">
@@ -315,7 +315,7 @@ export default function FeaturesPage() {
             </a>
           ))}
         </div>
-        <div className="handwritten text-[10px] text-[#7e7576] max-w-[160px] text-right italic">
+        <div className="handwritten text-[10px] text-[#7e7576] max-w-40 text-right italic">
           &ldquo;Design is the silent ambassador of your code.&rdquo; — Revision B
         </div>
       </footer>

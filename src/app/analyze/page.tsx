@@ -139,7 +139,7 @@ function AnalyzeContent() {
       style={{ fontFamily: "var(--font-sketch)", color: "#1a1a1a", minWidth: 1376 }}
     >
       {/* ── Main Container ── */}
-      <div className="max-w-[1340px] mx-auto border-4 border-black p-1 bg-white relative">
+      <div className="max-w-335 mx-auto border-4 border-black p-1 bg-white relative">
 
         {/* ── Top Bar ── */}
         <header className="flex items-center justify-between border-b-2 border-black pb-4 mb-4 p-2">
@@ -176,7 +176,7 @@ function AnalyzeContent() {
                     type="text"
                     value={repoUrl}
                     onChange={(e) => setRepoUrl(e.target.value)}
-                    className="input-sketch w-[340px]"
+                    className="input-sketch w-85"
                     placeholder="Enter GitHub repository URL..."
                     disabled={loading}
                   />
@@ -226,7 +226,7 @@ function AnalyzeContent() {
         <div className="flex gap-4 p-1">
 
           {/* ── Left Sidebar ── */}
-          <aside className="w-56 flex-shrink-0">
+          <aside className="w-56 shrink-0">
             <div className="mb-6">
               <h3 className="text-xs font-bold uppercase mb-4 border-b border-black pb-1">Report Sections</h3>
               <nav className="space-y-1">
@@ -237,7 +237,7 @@ function AnalyzeContent() {
                     onClick={() => handleSectionClick(item)}
                   >
                     <span>{item.icon === "🔲" ? (
-                      <span className="w-4 h-4 border border-black grid grid-cols-2 gap-0.5 p-0.5 inline-grid">
+                      <span className="w-4 h-4 border border-black grid grid-cols-2 gap-0.5 p-0.5">
                         <span className="bg-black/20" /><span className="bg-black/20" />
                         <span className="bg-black/20" /><span className="bg-black/20" />
                       </span>
@@ -267,7 +267,7 @@ function AnalyzeContent() {
           </aside>
 
           {/* ── Main Dashboard Grid ── */}
-          <main className="flex-grow grid grid-cols-12 gap-4">
+          <main className="grow grid grid-cols-12 gap-4">
 
             {/* FIG. 01 — Overview */}
             <div id="fig-01" className="col-span-4 sketch-border p-4 h-64 relative overflow-hidden">
@@ -314,7 +314,7 @@ function AnalyzeContent() {
               <span className="fig-label">FIG. 02</span>
               <h3 className="font-bold border-b border-black mb-4 uppercase text-sm">Health Score</h3>
               <div className="flex items-center justify-between h-36">
-                <div className="relative w-32 h-32 border-2 border-black rounded-full flex items-center justify-center flex-shrink-0 bg-white">
+                <div className="relative w-32 h-32 border-2 border-black rounded-full flex items-center justify-center shrink-0 bg-white">
                   <div className="absolute inset-2 border border-dashed border-gray-400 rounded-full" />
                   <div className="text-center text-xs px-2">
                     {report ? (
@@ -331,7 +331,7 @@ function AnalyzeContent() {
                   <span className="absolute top-1/2 -left-1 -translate-y-1/2 text-xs">+</span>
                   <span className="absolute top-1/2 -right-1 -translate-y-1/2 text-xs">+</span>
                 </div>
-                <div className="flex-grow ml-4 space-y-2">
+                <div className="grow ml-4 space-y-2">
                   {[
                     ["Code Quality", report ? `${report.codeQuality.maintainabilityIndex}/100` : "---"],
                     ["Security", report ? `${report.security.score}/100` : "---"],
@@ -395,7 +395,7 @@ function AnalyzeContent() {
                     ))
                   )}
                 </div>
-                <div className="flex-grow">
+                <div className="grow">
                   {report ? (
                     <div className="border border-black p-2 h-28 bg-neutral-50 overflow-y-auto text-[10px] font-mono">
                       <div className="font-bold uppercase border-b border-black pb-1 mb-1">
@@ -493,7 +493,7 @@ function AnalyzeContent() {
                 </div>
               ) : (
                 <div className="border border-black h-24 mb-2 flex flex-col p-2 relative overflow-hidden bg-white">
-                  <div className="ml-4 flex flex-grow items-center justify-center text-center text-[10px]">
+                  <div className="ml-4 flex grow items-center justify-center text-center text-[10px]">
                     Generated README<br />will appear here
                   </div>
                 </div>
@@ -586,7 +586,7 @@ function AnalyzeContent() {
               <span className="fig-label">FIG. 11</span>
               <h3 className="font-bold border-b border-black mb-2 uppercase text-xs">Performance</h3>
               <div className="flex gap-4">
-                <div className="flex-grow h-24 overflow-y-auto text-[10px] font-mono border border-black p-2 bg-white">
+                <div className="grow h-24 overflow-y-auto text-[10px] font-mono border border-black p-2 bg-white">
                   {report ? (
                     <div>
                       <div className="font-bold mb-1">Score: {report.performance.score}/100 (Risk: {report.performance.bundleRiskLevel})</div>
@@ -605,7 +605,7 @@ function AnalyzeContent() {
                     </div>
                   )}
                 </div>
-                <div className="w-16 h-16 border-2 border-black rounded-full relative mt-2 flex-shrink-0 bg-white flex items-center justify-center">
+                <div className="w-16 h-16 border-2 border-black rounded-full relative mt-2 shrink-0 bg-white flex items-center justify-center">
                   <span className="font-bold text-sm font-mono">{report ? `${report.performance.score}` : "..."}</span>
                 </div>
               </div>
@@ -617,7 +617,7 @@ function AnalyzeContent() {
               <span className="fig-label">FIG. 12</span>
               <h3 className="font-bold border-b border-black mb-2 uppercase text-xs">Documentation Score</h3>
               <div className="flex gap-4">
-                <div className="flex-grow h-24 overflow-y-auto text-[10px] font-mono border border-black p-2 bg-white">
+                <div className="grow h-24 overflow-y-auto text-[10px] font-mono border border-black p-2 bg-white">
                   {report ? (
                     <div>
                       <div className="font-bold mb-1">Doc Coverage Score: {report.documentation.score}/100</div>
@@ -632,10 +632,10 @@ function AnalyzeContent() {
                     </div>
                   )}
                 </div>
-                <div className="w-20 space-y-2 mt-2 flex-shrink-0">
+                <div className="w-20 space-y-2 mt-2 shrink-0">
                   {[1, 0.5, 0.3, 0.1].map((opacity, i) => (
                     <div key={i} className="flex items-center gap-1">
-                      <div className="w-3 h-3 border border-black flex-shrink-0" />
+                      <div className="w-3 h-3 border border-black shrink-0" />
                       <div className="w-full h-0.5 bg-black" style={{ opacity }} />
                     </div>
                   ))}
@@ -649,7 +649,7 @@ function AnalyzeContent() {
               <span className="fig-label">FIG. 13</span>
               <h3 className="font-bold border-b border-black mb-2 uppercase text-xs">Contributor Guide</h3>
               <div className="flex gap-4">
-                <div className="flex-grow border border-black p-2 relative overflow-y-auto h-24 bg-white text-[9px] font-mono">
+                <div className="flex-1 border border-black p-2 relative overflow-y-auto h-24 bg-white text-[9px] font-mono">
                   {report ? (
                     <div>
                       <div className="font-bold mb-1">Setup Steps:</div>
@@ -664,7 +664,7 @@ function AnalyzeContent() {
                     </div>
                   )}
                 </div>
-                <div className="w-16 flex flex-col items-center justify-center gap-1 pt-2 flex-shrink-0">
+                <div className="w-16 flex flex-col items-center justify-center gap-1 pt-2 shrink-0">
                   <div className="flex -space-x-2">
                     {[0, 1, 2].map((i) => (
                       <div key={i} className="w-6 h-6 border-2 border-black rounded-full bg-white flex items-center justify-center text-[8px] font-bold">
@@ -680,7 +680,7 @@ function AnalyzeContent() {
           </main>
 
           {/* ── Right Sidebar ── */}
-          <aside className="w-20 flex-shrink-0 flex flex-col items-center border-l-2 border-black pt-4">
+          <aside className="w-20 shrink-0 flex flex-col items-center border-l-2 border-black pt-4">
             <div className="mb-8 relative w-12 h-24">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-4 h-4 border border-black" />
               <div className="absolute top-4 left-1/2 -translate-x-1/2 w-0.5 h-16 bg-black" />
