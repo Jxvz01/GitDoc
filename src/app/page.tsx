@@ -85,7 +85,7 @@ export default function Home() {
   return (
     <div className="p-8">
       {/* ── Page Frame ── */}
-      <div className="max-w-350 mx-auto min-h-screen relative border-4 border-black p-8 bg-white/50">
+      <div className="max-w-[1400px] mx-auto min-h-screen relative border-4 border-black p-8 bg-white/50">
 
         {/* ── Compass Decoration ── */}
         <div

@@ -315,7 +315,7 @@ export default function FeaturesPage() {
             </a>
           ))}
         </div>
-        <div className="handwritten text-[10px] text-[#7e7576] max-w-40 text-right italic">
+        <div className="handwritten text-[10px] text-[#7e7576] max-w-[160px] text-right italic">
           &ldquo;Design is the silent ambassador of your code.&rdquo; — Revision B
         </div>
       </footer>

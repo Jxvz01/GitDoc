@@ -139,7 +139,7 @@ function AnalyzeContent() {
       style={{ fontFamily: "var(--font-sketch)", color: "#1a1a1a", minWidth: 1376 }}
     >
       {/* ── Main Container ── */}
-      <div className="max-w-335 mx-auto border-4 border-black p-1 bg-white relative">
+      <div className="max-w-[1340px] mx-auto border-4 border-black p-1 bg-white relative">
 
         {/* ── Top Bar ── */}
         <header className="flex items-center justify-between border-b-2 border-black pb-4 mb-4 p-2">
@@ -176,7 +176,7 @@ function AnalyzeContent() {
                     type="text"
                     value={repoUrl}
                     onChange={(e) => setRepoUrl(e.target.value)}
-                    className="input-sketch w-85"
+                    className="input-sketch w-[340px]"
                     placeholder="Enter GitHub repository URL..."
                     disabled={loading}
                   />
