@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import BuildingAnimation from "./BuildingAnimation";
 
 /* ── Feature cards data ── */
 const features = [
@@ -212,23 +211,31 @@ export default function Home() {
 
           {/* Right — Illustration */}
           <div className="relative">
-            <BuildingAnimation />
+            <div className="relative w-full aspect-square bg-white border-2 border-dashed border-gray-400 flex items-center justify-center overflow-hidden">
+              {/* Blueprint image */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLvpiD9FIrLAs81PYf1UW-vMenSS3xl7VRkGe-BHdMkJ86lM7Z7zxMgh72gPhZJmew4Xf2oWrFeoDq8MkVfGj_fdoBGhz52mQJAx0ssf2-e-ryeQ8qgZ-FimlqJlaXq-DFwp6n9eA5T30F0iQGtnAXTVK360W7KdzPoIR7szkuIWfSujcZ6WiCXvEc2ZsmAT1g16akH13zT4oTA6o9d6Xft5cbbjkiI-piQg5-x0M45Y86aXsLHJDmHmESiVlLfXxtza5zxpYgk45I"
+                alt="Architecture Blueprint"
+                className="w-full h-full object-contain p-4 grayscale opacity-80"
+              />
 
-            {/* INPUT annotation */}
-            <div className="absolute top-10 right-10 sketch-text text-xs leading-tight border-l-2 border-black pl-2 pointer-events-none z-10">
-              INPUT:<br />
-              - REPOSITORY URL<br />
-              - AI ANALYSIS<br />
-              - CONTEXT
-            </div>
+              {/* INPUT annotation */}
+              <div className="absolute top-10 right-10 sketch-text text-xs leading-tight border-l-2 border-black pl-2">
+                INPUT:<br />
+                - REPOSITORY URL<br />
+                - AI ANALYSIS<br />
+                - CONTEXT
+              </div>
 
-            {/* OUTPUT annotation */}
-            <div className="absolute bottom-10 right-10 sketch-text text-xs leading-tight border-l-2 border-black pl-2 pointer-events-none z-10">
-              OUTPUT:<br />
-              - DOCUMENTATION<br />
-              - ARCHITECTURE<br />
-              - INSIGHTS<br />
-              - IMPROVEMENTS
+              {/* OUTPUT annotation */}
+              <div className="absolute bottom-10 right-10 sketch-text text-xs leading-tight border-l-2 border-black pl-2">
+                OUTPUT:<br />
+                - DOCUMENTATION<br />
+                - ARCHITECTURE<br />
+                - INSIGHTS<br />
+                - IMPROVEMENTS
+              </div>
             </div>
           </div>
         </main>
