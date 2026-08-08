@@ -220,22 +220,6 @@ export default function Home() {
                 className="w-full h-full object-contain p-4 grayscale opacity-80"
               />
 
-              {/* INPUT annotation */}
-              <div className="absolute top-10 right-10 sketch-text text-xs leading-tight border-l-2 border-black pl-2">
-                INPUT:<br />
-                - REPOSITORY URL<br />
-                - AI ANALYSIS<br />
-                - CONTEXT
-              </div>
-
-              {/* OUTPUT annotation */}
-              <div className="absolute bottom-10 right-10 sketch-text text-xs leading-tight border-l-2 border-black pl-2">
-                OUTPUT:<br />
-                - DOCUMENTATION<br />
-                - ARCHITECTURE<br />
-                - INSIGHTS<br />
-                - IMPROVEMENTS
-              </div>
             </div>
           </div>
         </main>
