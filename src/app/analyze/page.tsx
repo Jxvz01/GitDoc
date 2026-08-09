@@ -40,6 +40,12 @@ function AnalyzeContent() {
   const [copiedReadme, setCopiedReadme] = useState(false);
   const [selectedFolderNode, setSelectedFolderNode] = useState<FileNode | null>(null);
 
+  const getCardClass = (figId: string, baseClasses: string) => {
+    const activeFigId = sidebarItems.find((item) => item.label === activeSection)?.figId || "";
+    const isActive = activeFigId === figId;
+    return `${baseClasses} transition-all duration-300 ease-out ${isActive ? "active-card" : ""}`;
+  };
+
   const runAnalysis = async (targetUrl: string) => {
     if (!targetUrl.trim()) return;
     const cacheKey = "gitdoc_cache_" + targetUrl.trim().toLowerCase();
@@ -282,7 +288,7 @@ function AnalyzeContent() {
           <main className="grow grid grid-cols-12 gap-4">
 
             {/* FIG. 01 — Overview */}
-            <div id="fig-01" className="col-span-4 sketch-border p-4 h-64 relative overflow-hidden">
+            <div id="fig-01" className={getCardClass("fig-01", "col-span-4 sketch-border p-4 h-64 relative overflow-hidden")}>
               <span className="fig-label">FIG. 01</span>
               <h3 className="font-bold border-b border-black mb-4 uppercase text-sm">Overview</h3>
               {loading ? (
@@ -322,7 +328,7 @@ function AnalyzeContent() {
             </div>
 
             {/* FIG. 02 — Health Score */}
-            <div id="fig-02" className="col-span-4 sketch-border p-4 h-64 relative">
+            <div id="fig-02" className={getCardClass("fig-02", "col-span-4 sketch-border p-4 h-64 relative")}>
               <span className="fig-label">FIG. 02</span>
               <h3 className="font-bold border-b border-black mb-4 uppercase text-sm">Health Score</h3>
               <div className="flex items-center justify-between h-36">
@@ -360,7 +366,7 @@ function AnalyzeContent() {
             </div>
 
             {/* FIG. 03 — Architecture */}
-            <div id="fig-03" className="col-span-4 sketch-border p-4 h-64 relative overflow-hidden">
+            <div id="fig-03" className={getCardClass("fig-03", "col-span-4 sketch-border p-4 h-64 relative overflow-hidden")}>
               <span className="fig-label">FIG. 03</span>
               <h3 className="font-bold border-b border-black mb-2 uppercase text-sm">Architecture Diagram</h3>
               {report ? (
@@ -380,7 +386,7 @@ function AnalyzeContent() {
             </div>
 
             {/* FIG. 04 — Folder Explorer */}
-            <div id="fig-04" className="col-span-4 sketch-border p-4 h-64 relative overflow-hidden">
+            <div id="fig-04" className={getCardClass("fig-04", "col-span-4 sketch-border p-4 h-64 relative overflow-hidden")}>
               <span className="fig-label">FIG. 04</span>
               <h3 className="font-bold border-b border-black mb-4 uppercase text-sm">Folder Explorer</h3>
               <div className="flex gap-4">
@@ -438,7 +444,7 @@ function AnalyzeContent() {
             </div>
 
             {/* FIG. 05 — Tech Stack */}
-            <div id="fig-05" className="col-span-4 sketch-border p-4 h-64 relative overflow-hidden">
+            <div id="fig-05" className={getCardClass("fig-05", "col-span-4 sketch-border p-4 h-64 relative overflow-hidden")}>
               <span className="fig-label">FIG. 05</span>
               <h3 className="font-bold border-b border-black mb-4 uppercase text-sm">Tech Stack</h3>
               {report ? (
@@ -466,7 +472,7 @@ function AnalyzeContent() {
             </div>
 
             {/* FIG. 06 — AI Summary */}
-            <div id="fig-06" className="col-span-4 sketch-border p-4 h-64 relative overflow-hidden">
+            <div id="fig-06" className={getCardClass("fig-06", "col-span-4 sketch-border p-4 h-64 relative overflow-hidden")}>
               <span className="fig-label">FIG. 06</span>
               <h3 className="font-bold border-b border-black mb-2 uppercase text-sm">AI Summary</h3>
               <div className="border border-black bg-white shadow-md p-3 h-40 relative overflow-y-auto font-mono text-[10px] leading-relaxed">
@@ -486,7 +492,7 @@ function AnalyzeContent() {
             </div>
 
             {/* FIG. 07 — README */}
-            <div id="fig-07" className="col-span-3 sketch-border p-4 h-56 relative overflow-hidden">
+            <div id="fig-07" className={getCardClass("fig-07", "col-span-3 sketch-border p-4 h-56 relative overflow-hidden")}>
               <span className="fig-label">FIG. 07</span>
               <div className="flex justify-between items-center border-b border-black mb-2 pb-1">
                 <h3 className="font-bold uppercase text-xs">README Generator</h3>
@@ -514,7 +520,7 @@ function AnalyzeContent() {
             </div>
 
             {/* FIG. 08 — Security */}
-            <div id="fig-08" className="col-span-3 sketch-border p-4 h-56 relative overflow-hidden">
+            <div id="fig-08" className={getCardClass("fig-08", "col-span-3 sketch-border p-4 h-56 relative overflow-hidden")}>
               <span className="fig-label">FIG. 08</span>
               <h3 className="font-bold border-b border-black mb-2 uppercase text-xs">Security Analysis</h3>
               {report ? (
@@ -545,7 +551,7 @@ function AnalyzeContent() {
             </div>
 
             {/* FIG. 09 — Code Smells */}
-            <div id="fig-09" className="col-span-3 sketch-border p-4 h-56 relative overflow-hidden">
+            <div id="fig-09" className={getCardClass("fig-09", "col-span-3 sketch-border p-4 h-56 relative overflow-hidden")}>
               <span className="fig-label">FIG. 09</span>
               <h3 className="font-bold border-b border-black mb-2 uppercase text-xs">Code Smells</h3>
               {report ? (
@@ -571,7 +577,7 @@ function AnalyzeContent() {
             </div>
 
             {/* FIG. 10 — Maintainability */}
-            <div id="fig-10" className="col-span-3 sketch-border p-4 h-56 relative overflow-hidden">
+            <div id="fig-10" className={getCardClass("fig-10", "col-span-3 sketch-border p-4 h-56 relative overflow-hidden")}>
               <span className="fig-label">FIG. 10</span>
               <h3 className="font-bold border-b border-black mb-2 uppercase text-xs">Maintainability</h3>
               {report ? (
@@ -594,7 +600,7 @@ function AnalyzeContent() {
             </div>
 
             {/* FIG. 11 — Performance */}
-            <div id="fig-11" className="col-span-4 sketch-border p-4 h-48 relative overflow-hidden">
+            <div id="fig-11" className={getCardClass("fig-11", "col-span-4 sketch-border p-4 h-48 relative overflow-hidden")}>
               <span className="fig-label">FIG. 11</span>
               <h3 className="font-bold border-b border-black mb-2 uppercase text-xs">Performance</h3>
               <div className="flex gap-4">
@@ -625,7 +631,7 @@ function AnalyzeContent() {
             </div>
 
             {/* FIG. 12 — Documentation */}
-            <div id="fig-12" className="col-span-4 sketch-border p-4 h-48 relative overflow-hidden">
+            <div id="fig-12" className={getCardClass("fig-12", "col-span-4 sketch-border p-4 h-48 relative overflow-hidden")}>
               <span className="fig-label">FIG. 12</span>
               <h3 className="font-bold border-b border-black mb-2 uppercase text-xs">Documentation Score</h3>
               <div className="flex gap-4">
@@ -657,7 +663,7 @@ function AnalyzeContent() {
             </div>
 
             {/* FIG. 13 — Contributor Guide */}
-            <div id="fig-13" className="col-span-4 sketch-border p-4 h-48 relative overflow-hidden">
+            <div id="fig-13" className={getCardClass("fig-13", "col-span-4 sketch-border p-4 h-48 relative overflow-hidden")}>
               <span className="fig-label">FIG. 13</span>
               <h3 className="font-bold border-b border-black mb-2 uppercase text-xs">Contributor Guide</h3>
               <div className="flex gap-4">
