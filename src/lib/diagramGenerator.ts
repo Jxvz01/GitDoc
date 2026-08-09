@@ -198,6 +198,8 @@ function generateSketchSvg(nodes: ArchitectureNode[], edges: ArchitectureEdge[],
       <!-- Grid Lines -->
       <line x1="0" y1="60" x2="360" y2="60" stroke="#e5e7eb" stroke-width="1"/>
       <line x1="180" y1="0" x2="180" y2="120" stroke="#e5e7eb" stroke-width="1"/>
+      <!-- Repository Title -->
+      <text x="10" y="15" font-size="5.5" font-family="monospace" fill="#9ca3af" font-weight="bold">${escapeXml(metadata.fullName.toUpperCase())}</text>
       ${svgElements}
     </svg>
   `;

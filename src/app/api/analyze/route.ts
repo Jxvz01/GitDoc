@@ -125,10 +125,11 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json(report);
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : 'An unexpected error occurred during repository analysis.';
     console.error('GitDoc Analysis Error:', err);
     return NextResponse.json(
-      { error: err.message || 'An unexpected error occurred during repository analysis.' },
+      { error: errorMsg },
       { status: 500 }
     );
   }

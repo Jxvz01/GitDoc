@@ -7,7 +7,6 @@ import {
   SecurityVulnerability,
   DocumentationReport,
   PerformanceReport,
-  ContributorGuideReport,
   RepoMetadata,
 } from './types';
 import { GitTreeNode } from './githubClient';
@@ -31,10 +30,15 @@ export function detectTechStack(
     });
   });
 
+  interface PackageManifest {
+    dependencies?: Record<string, string>;
+    devDependencies?: Record<string, string>;
+  }
+
   const packageJsonStr = manifestContents['package.json'] || '';
-  let pkgObj: any = null;
+  let pkgObj: PackageManifest | null = null;
   try {
-    if (packageJsonStr) pkgObj = JSON.parse(packageJsonStr);
+    if (packageJsonStr) pkgObj = JSON.parse(packageJsonStr) as PackageManifest;
   } catch {
     // Ignore invalid JSON
   }
@@ -52,17 +56,58 @@ export function detectTechStack(
   if (allDeps['nuxt']) stack.push({ name: 'Nuxt', category: 'Framework', version: allDeps['nuxt'] });
   if (allDeps['svelte'] || allDeps['@sveltejs/kit']) stack.push({ name: 'Svelte', category: 'Framework' });
   if (allDeps['express']) stack.push({ name: 'Express', category: 'Framework', version: allDeps['express'] });
-  if (allDeps['tailwindcss'] || fileNames.some((f) => f.includes('tailwind'))) stack.push({ name: 'Tailwind CSS', category: 'Style' });
-  if (allDeps['typescript'] || fileNames.some((f) => f.endsWith('.ts') || f.endsWith('.tsx'))) stack.push({ name: 'TypeScript', category: 'Language' });
-  if (allDeps['vite']) stack.push({ name: 'Vite', category: 'Build Tool' });
-  if (allDeps['webpack']) stack.push({ name: 'Webpack', category: 'Build Tool' });
+  if (allDeps['@nestjs/core']) stack.push({ name: 'NestJS', category: 'Framework', version: allDeps['@nestjs/core'] });
+  if (allDeps['fastify']) stack.push({ name: 'Fastify', category: 'Framework', version: allDeps['fastify'] });
+
+  // Databases
   if (allDeps['prisma'] || fileNames.some((f) => f.includes('prisma'))) stack.push({ name: 'Prisma ORM', category: 'Database' });
   if (allDeps['mongoose'] || allDeps['mongodb']) stack.push({ name: 'MongoDB', category: 'Database' });
-  if (allDeps['pg'] || allDeps['postgres']) stack.push({ name: 'PostgreSQL', category: 'Database' });
+  if (allDeps['pg'] || allDeps['postgres'] || allDeps['pg-promise']) stack.push({ name: 'PostgreSQL', category: 'Database' });
+  if (allDeps['mysql'] || allDeps['mysql2']) stack.push({ name: 'MySQL', category: 'Database' });
+  if (allDeps['redis'] || allDeps['ioredis']) stack.push({ name: 'Redis', category: 'Database' });
+  if (allDeps['sqlite3'] || fileNames.some((f) => f.endsWith('.sqlite') || f.endsWith('.sqlite3') || f.endsWith('.db'))) stack.push({ name: 'SQLite', category: 'Database' });
 
-  // Other Ecosystem Manifests
+  // Styles
+  if (allDeps['tailwindcss'] || fileNames.some((f) => f.includes('tailwind'))) stack.push({ name: 'Tailwind CSS', category: 'Style' });
+  if (allDeps['sass'] || allDeps['node-sass']) stack.push({ name: 'Sass', category: 'Style' });
+  if (allDeps['styled-components']) stack.push({ name: 'Styled Components', category: 'Style' });
+
+  // Languages
+  if (allDeps['typescript'] || fileNames.some((f) => f.endsWith('.ts') || f.endsWith('.tsx'))) stack.push({ name: 'TypeScript', category: 'Language' });
+
+  // Build tools
+  if (allDeps['vite']) stack.push({ name: 'Vite', category: 'Build Tool' });
+  if (allDeps['webpack']) stack.push({ name: 'Webpack', category: 'Build Tool' });
+
+  // Testing
+  if (allDeps['jest']) stack.push({ name: 'Jest', category: 'Testing', version: allDeps['jest'] });
+  if (allDeps['vitest']) stack.push({ name: 'Vitest', category: 'Testing', version: allDeps['vitest'] });
+  if (allDeps['@playwright/test']) stack.push({ name: 'Playwright', category: 'Testing' });
+  if (allDeps['cypress']) stack.push({ name: 'Cypress', category: 'Testing' });
+  if (allDeps['mocha']) stack.push({ name: 'Mocha', category: 'Testing' });
+
+  // Libraries
+  if (allDeps['lodash'] || allDeps['lodash-es']) stack.push({ name: 'Lodash', category: 'Library' });
+  if (allDeps['moment']) stack.push({ name: 'Moment.js', category: 'Library' });
+  if (allDeps['zod']) stack.push({ name: 'Zod', category: 'Library', version: allDeps['zod'] });
+  if (allDeps['axios']) stack.push({ name: 'Axios', category: 'Library' });
+  if (allDeps['uuid']) stack.push({ name: 'UUID', category: 'Library' });
+  if (allDeps['framer-motion']) stack.push({ name: 'Framer Motion', category: 'Library' });
+  if (allDeps['gsap']) stack.push({ name: 'GSAP', category: 'Library' });
+  if (allDeps['lucide-react']) stack.push({ name: 'Lucide React', category: 'Library' });
+
+  // Cloud & DevOps / Other Ecosystems
   if (fileNames.some((f) => f === 'dockerfile' || f === 'docker-compose.yml')) {
     stack.push({ name: 'Docker', category: 'DevOps' });
+  }
+  if (fileNames.some((f) => f.includes('.github/workflows'))) {
+    stack.push({ name: 'GitHub Actions', category: 'DevOps' });
+  }
+  if (allDeps['firebase'] || allDeps['firebase-admin']) {
+    stack.push({ name: 'Firebase', category: 'DevOps' });
+  }
+  if (fileNames.some((f) => f.endsWith('.tf') || f.endsWith('.tfvars'))) {
+    stack.push({ name: 'Terraform', category: 'DevOps' });
   }
   if (fileNames.some((f) => f === 'cargo.toml')) {
     stack.push({ name: 'Rust', category: 'Language' });
@@ -73,9 +118,16 @@ export function detectTechStack(
   }
   if (fileNames.some((f) => f === 'requirements.txt' || f === 'pyproject.toml' || f === 'pipfile')) {
     stack.push({ name: 'Python', category: 'Language' });
+    // Python frameworks
+    const reqStr = manifestContents['requirements.txt'] || manifestContents['pyproject.toml'] || '';
+    if (reqStr.toLowerCase().includes('django')) stack.push({ name: 'Django', category: 'Framework' });
+    if (reqStr.toLowerCase().includes('flask')) stack.push({ name: 'Flask', category: 'Framework' });
+    if (reqStr.toLowerCase().includes('fastapi')) stack.push({ name: 'FastAPI', category: 'Framework' });
   }
   if (fileNames.some((f) => f === 'pom.xml' || f === 'build.gradle')) {
     stack.push({ name: 'Java / JVM', category: 'Language' });
+    const buildStr = manifestContents['pom.xml'] || manifestContents['build.gradle'] || '';
+    if (buildStr.toLowerCase().includes('spring-boot')) stack.push({ name: 'Spring Boot', category: 'Framework' });
   }
 
   // Deduplicate
@@ -157,6 +209,7 @@ export function computeCodeMetrics(treeNodes: GitTreeNode[], languages: Record<s
 export function analyzeCodeQuality(treeNodes: GitTreeNode[], metrics: CodeMetrics): CodeQualityMetrics {
   const issues: CodeQualityIssue[] = [];
   const blobs = treeNodes.filter((n) => n.type === 'blob');
+  const filePaths = treeNodes.map((n) => n.path.toLowerCase());
 
   // Check nesting depth
   if (metrics.maxNestingDepth > 6) {
@@ -213,11 +266,50 @@ export function analyzeCodeQuality(treeNodes: GitTreeNode[], metrics: CodeMetric
     });
   }
 
+  // Check for presence of automated tests
+  const hasTests = filePaths.some((p) =>
+    p.includes('.test.') ||
+    p.includes('.spec.') ||
+    p.includes('/test/') ||
+    p.includes('/tests/') ||
+    p.startsWith('test/') ||
+    p.startsWith('tests/') ||
+    p.includes('/__tests__/')
+  );
+  if (!hasTests) {
+    issues.push({
+      id: 'cq-missing-tests',
+      severity: 'low',
+      title: 'No Automated Test Files Detected',
+      description: 'No automated tests (such as *.test.ts or *.spec.js) were found in the codebase.',
+      recommendation: 'Set up a testing framework like Jest or Vitest to build confidence and prevent regression bugs.',
+    });
+  }
+
+  // Check for presence of linter/formatter configs
+  const hasLinter = filePaths.some((p) =>
+    p.includes('.eslintrc') ||
+    p.includes('eslint.config') ||
+    p.includes('.prettierrc') ||
+    p.includes('prettier.config')
+  );
+  if (!hasLinter) {
+    issues.push({
+      id: 'cq-missing-linter',
+      severity: 'low',
+      title: 'No Code Linter/Formatter Config Detected',
+      description: 'The repository is missing standard ESLint or Prettier configuration files.',
+      recommendation: 'Configure ESLint and Prettier to enforce consistent code style and catch bugs early.',
+    });
+  }
+
   // Calculate Maintainability Index (0 to 100)
   let maintainabilityIndex = 85;
   if (metrics.maxNestingDepth > 5) maintainabilityIndex -= 10;
   if (longFiles.length > 0) maintainabilityIndex -= 15;
   if (metrics.averageFileSizeKb > 50) maintainabilityIndex -= 10;
+  if (!hasTests) maintainabilityIndex -= 5;
+  if (!hasLinter) maintainabilityIndex -= 5;
   maintainabilityIndex = Math.max(40, Math.min(98, maintainabilityIndex));
 
   const cyclomaticComplexity =
@@ -266,6 +358,23 @@ export function scanSecurity(treeNodes: GitTreeNode[], manifestContents: Record<
     });
   }
 
+  // Scan for exposed zip, bak, or log files in git tree
+  const exposedBackups = filePaths.filter((p) =>
+    p.endsWith('.zip') ||
+    p.endsWith('.tar.gz') ||
+    p.endsWith('.bak') ||
+    (p.endsWith('.log') && !p.includes('node_modules') && !p.includes('.next'))
+  );
+  if (exposedBackups.length > 0) {
+    vulnerabilities.push({
+      severity: 'HIGH',
+      type: 'Exposed Archive or Backup File',
+      file: exposedBackups[0],
+      description: `Exposure of backup/archive/log files in git repository history (${exposedBackups.slice(0, 3).join(', ')}).`,
+      remediation: 'Remove backup, log, or zip archives from git history and add their extensions to `.gitignore`.',
+    });
+  }
+
   const hasSecurityPolicy = filePaths.some((p) => p.includes('security.md'));
 
   // Scan manifests for hardcoded secrets or unsafe patterns
@@ -293,6 +402,18 @@ export function scanSecurity(treeNodes: GitTreeNode[], manifestContents: Record<
         file: path,
         description: 'Hardcoded Cloud or Service provider API token detected.',
         remediation: 'Revoke token immediately and inject via environment variables.',
+      });
+    }
+
+    // Pattern matching for hardcoded Slack Incoming Webhooks
+    if (/https:\/\/hooks\.slack\.com\/services\/T[A-Z0-9]{8}\/B[A-Z0-9]{8}\/[A-Za-z0-9]{24}/i.test(content)) {
+      hasHardcodedSecrets = true;
+      vulnerabilities.push({
+        severity: 'CRITICAL',
+        type: 'Exposed Slack Webhook',
+        file: path,
+        description: 'Hardcoded Slack Incoming Webhook URL detected in repository code.',
+        remediation: 'Revoke Slack webhook client credentials and inject dynamically via environment variables.',
       });
     }
   });

@@ -26,6 +26,13 @@ function AnalyzeContent() {
   const repoParam = searchParams.get("repo") || "";
 
   const [repoUrl, setRepoUrl] = useState(repoParam);
+  const [prevRepoParam, setPrevRepoParam] = useState(repoParam);
+
+  if (repoParam !== prevRepoParam) {
+    setPrevRepoParam(repoParam);
+    setRepoUrl(repoParam);
+  }
+
   const [activeSection, setActiveSection] = useState("Overview");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -62,7 +69,7 @@ function AnalyzeContent() {
       });
 
       const contentType = res.headers.get("content-type") || "";
-      let data: any = {};
+      let data: (GitDocReport & { error?: string }) | null = null;
       if (contentType.includes("application/json")) {
         data = await res.json();
       } else {
@@ -70,17 +77,20 @@ function AnalyzeContent() {
       }
 
       if (!res.ok) {
-        throw new Error(data.error || "Failed to analyze repository.");
+        throw new Error(data?.error || "Failed to analyze repository.");
       }
-      setReport(data);
-      if (data.folderTree) {
-        setSelectedFolderNode(data.folderTree);
+      if (data) {
+        setReport(data);
+        if (data.folderTree) {
+          setSelectedFolderNode(data.folderTree);
+        }
+        if (typeof window !== "undefined") {
+          sessionStorage.setItem(cacheKey, JSON.stringify(data));
+        }
       }
-      if (typeof window !== "undefined") {
-        sessionStorage.setItem(cacheKey, JSON.stringify(data));
-      }
-    } catch (err: any) {
-      setError(err.message || "An error occurred while fetching analysis.");
+    } catch (err: unknown) {
+      const errMsg = err instanceof Error ? err.message : "An error occurred while fetching analysis.";
+      setError(errMsg);
     } finally {
       setLoading(false);
     }
@@ -88,8 +98,10 @@ function AnalyzeContent() {
 
   useEffect(() => {
     if (repoParam) {
-      setRepoUrl(repoParam);
-      runAnalysis(repoParam);
+      const timer = setTimeout(() => {
+        runAnalysis(repoParam);
+      }, 0);
+      return () => clearTimeout(timer);
     }
   }, [repoParam]);
 

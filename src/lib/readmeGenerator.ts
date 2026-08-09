@@ -78,9 +78,11 @@ export function generateContributorGuide(
     'Keep pull requests concise and focused on a single change.',
   ];
 
+  const stackNames = techStack.map((t) => t.name).join(', ') || 'Standard stack';
+
   const guideMarkdown = `# Contributing to ${metadata.repo}
 
-Thank you for considering contributing!
+Thank you for considering contributing! This project uses: ${stackNames}.
 
 ## Code of Conduct
 Please be respectful and helpful to maintainers and fellow contributors.
