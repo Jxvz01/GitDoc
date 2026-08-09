@@ -157,49 +157,127 @@ export function generateArchitectureDiagram(
 }
 
 function generateSketchSvg(nodes: ArchitectureNode[], edges: ArchitectureEdge[], metadata: RepoMetadata): string {
-  const width = 360;
-  const height = 120;
+  const width = 600;
+  const height = 370;
 
-  // Render SVG nodes in horizontal pipeline layout
+  // Node Positions Map - Clean vertical-horizontal hierarchy layout
   const nodePositions: Record<string, { x: number; y: number }> = {
-    entry: { x: 25, y: 40 },
-    ui: { x: 95, y: 40 },
-    api: { x: 165, y: 20 },
-    services: { x: 165, y: 65 },
-    database: { x: 255, y: 65 },
-    config: { x: 255, y: 20 },
+    entry: { x: 235, y: 20 },
+    ui: { x: 50, y: 110 },
+    api: { x: 420, y: 110 },
+    services: { x: 235, y: 200 },
+    database: { x: 50, y: 290 },
+    config: { x: 420, y: 290 },
+  };
+
+  const getIcon = (type: string) => {
+    switch (type) {
+      case 'entry': return '⚡';
+      case 'component': return '💻';
+      case 'api': return '🔌';
+      case 'service':
+      case 'util': return '📦';
+      case 'database': return '💾';
+      case 'config': return '⚙️';
+      default: return '⚙️';
+    }
   };
 
   let svgElements = '';
 
-  // Render Connections (Lines)
+  // Render Connections with directional arrowheads
   edges.forEach((edge) => {
-    const fromPos = nodePositions[edge.from] || { x: 50, y: 50 };
-    const toPos = nodePositions[edge.to] || { x: 150, y: 50 };
-    svgElements += `<line x1="${fromPos.x + 45}" y1="${fromPos.y + 15}" x2="${toPos.x}" y2="${toPos.y + 15}" stroke="#000" stroke-width="1.5" stroke-dasharray="3,3" />`;
+    const fromPos = nodePositions[edge.from];
+    const toPos = nodePositions[edge.to];
+    if (!fromPos || !toPos) return;
+
+    // Centers of the two boxes
+    const fromCenter = { x: fromPos.x + 65, y: fromPos.y + 27.5 };
+    const toCenter = { x: toPos.x + 65, y: toPos.y + 27.5 };
+
+    let startX = fromCenter.x;
+    let startY = fromCenter.y;
+    let endX = toCenter.x;
+    let endY = toCenter.y;
+
+    if (toPos.y > fromPos.y + 60) {
+      // Below relationship
+      startY = fromPos.y + 55;
+      endY = toPos.y;
+      if (toPos.x > fromPos.x + 100) {
+        // diagonal right-down
+        startX = fromPos.x + 100;
+        endX = toPos.x + 30;
+      } else if (toPos.x < fromPos.x - 100) {
+        // diagonal left-down
+        startX = fromPos.x + 30;
+        endX = toPos.x + 100;
+      } else {
+        // straight down
+        startX = fromPos.x + 65;
+        endX = toPos.x + 65;
+      }
+    } else if (toPos.y < fromPos.y - 60) {
+      // Above relationship
+      startY = fromPos.y;
+      endY = toPos.y + 55;
+      startX = fromPos.x + 65;
+      endX = toPos.x + 65;
+    } else {
+      // Horizontal relationship
+      if (toPos.x > fromPos.x) {
+        // Right
+        startX = fromPos.x + 130;
+        endX = toPos.x;
+        startY = fromPos.y + 27.5;
+        endY = toPos.y + 27.5;
+      } else {
+        // Left
+        startX = fromPos.x;
+        endX = toPos.x + 130;
+        startY = fromPos.y + 27.5;
+        endY = toPos.y + 27.5;
+      }
+    }
+
+    svgElements += `<line x1="${startX}" y1="${startY}" x2="${endX}" y2="${endY}" stroke="#1f2937" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrow)" />`;
   });
 
-  // Render Nodes (Sketch Boxes)
+  // Render Nodes (Spacious Sketch Boxes)
   nodes.forEach((node) => {
-    const pos = nodePositions[node.id] || { x: 100, y: 50 };
-    const bg = node.type === 'entry' ? '#f3f4f6' : '#ffffff';
+    const pos = nodePositions[node.id];
+    if (!pos) return;
+    const bg = node.type === 'entry' ? '#eff6ff' : '#ffffff'; // light blue tint for entrypoint node
+    const border = node.type === 'entry' ? '#3b82f6' : '#111827';
+    const icon = getIcon(node.type);
+
     svgElements += `
       <g transform="translate(${pos.x}, ${pos.y})">
-        <rect x="0" y="0" width="55" height="30" fill="${bg}" stroke="#000" stroke-width="1.5" />
-        <text x="27" y="14" font-size="6.5" font-weight="bold" font-family="monospace" text-anchor="middle" fill="#000">${escapeXml(node.label.slice(0, 10))}</text>
-        <text x="27" y="24" font-size="5" font-family="sans-serif" text-anchor="middle" fill="#555">${node.filesCount} files</text>
+        <!-- Outer blueprint sketch shadow -->
+        <rect x="2" y="2" width="130" height="55" fill="none" stroke="rgba(0,102,204,0.1)" stroke-width="1" rx="4" />
+        <!-- Main box -->
+        <rect x="0" y="0" width="130" height="55" fill="${bg}" stroke="${border}" stroke-width="1.5" rx="4" />
+        <!-- Node Label -->
+        <text x="8" y="22" font-size="8.5" font-weight="bold" font-family="monospace" fill="#111827">${icon} ${escapeXml(node.label)}</text>
+        <!-- Node files sub-label -->
+        <text x="8" y="38" font-size="7" font-family="monospace" fill="#4b5563">${node.filesCount} source files</text>
       </g>
     `;
   });
 
   return `
     <svg viewBox="0 0 ${width} ${height}" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+          <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1f2937" />
+        </marker>
+      </defs>
       <rect width="100%" height="100%" fill="#fafafa" rx="4"/>
       <!-- Grid Lines -->
-      <line x1="0" y1="60" x2="360" y2="60" stroke="#e5e7eb" stroke-width="1"/>
-      <line x1="180" y1="0" x2="180" y2="120" stroke="#e5e7eb" stroke-width="1"/>
-      <!-- Repository Title -->
-      <text x="10" y="15" font-size="5.5" font-family="monospace" fill="#9ca3af" font-weight="bold">${escapeXml(metadata.fullName.toUpperCase())}</text>
+      <line x1="0" y1="185" x2="600" y2="185" stroke="#e5e7eb" stroke-width="1"/>
+      <line x1="300" y1="0" x2="300" y2="370" stroke="#e5e7eb" stroke-width="1"/>
+      <!-- Repository Title Label -->
+      <text x="12" y="20" font-size="6.5" font-family="monospace" fill="#9ca3af" font-weight="bold">${escapeXml(metadata.fullName.toUpperCase())}</text>
       ${svgElements}
     </svg>
   `;
